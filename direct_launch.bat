@@ -1,0 +1,3 @@
+@echo off
+echo Démarrage de EASY-Check avec le chemin complet...
+D:\EASY-Check\node_modules\electron\dist\electron.exe .

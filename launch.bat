@@ -1,0 +1,3 @@
+@echo off
+echo Démarrage de EASY-Check...
+npx electron .

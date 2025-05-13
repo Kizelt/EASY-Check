@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EASY-Check</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Barre de navigation principale -->
+        <nav class="main-nav">
+            <div class="nav-item active" id="nav-import">
+                <i class="fas fa-file-import"></i> Import
+            </div>
+            <div class="nav-item" id="nav-analyze">
+                <i class="fas fa-microscope"></i> Analyze
+            </div>
+            <div class="nav-item" id="nav-results">
+                <i class="fas fa-clipboard-check"></i> Results
+            </div>
+            <div class="nav-item" id="nav-export">
+                <i class="fas fa-file-export"></i> Export
+            </div>
+        </nav>
+
+        <!-- Section d'importation -->
+        <section id="import-section" class="app-section">
+            <h2>Import Product Folders</h2>
+            <div class="import-controls">
+                <button id="select-folder-btn" class="primary-btn">
+                    <i class="fas fa-folder-open"></i> Select Folders
+                </button>
+                <div class="import-status">
+                    <div id="loading-indicator" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> Processing...
+                    </div>
+                    <div id="success-indicator" style="display: none;">
+                        <i class="fas fa-check-circle"></i> Complete
+                    </div>
+                    <div id="error-indicator" style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i> Error: <span id="error-message"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="import-summary">
+                <p>Selected folders: <span id="folders-count">0</span></p>
+                <p>Detected products: <span id="products-count">0</span></p>
+            </div>
+            <div class="folder-tree" id="folder-tree">
+                <!-- Les dossiers sélectionnés apparaîtront ici -->
+            </div>
+            <div class="action-buttons">
+                <button id="start-analysis-btn" class="primary-btn" disabled>
+                    <i class="fas fa-play-circle"></i> Start Analysis
+                </button>
+            </div>
+        </section>
+
+        <!-- Section d'analyse -->
+        <section id="analysis-section" class="app-section">
+            <h2>Analyzing Products</h2>
+            <div class="analysis-status">
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="analysis-progress-bar"></div>
+                </div>
+                <p>Analyzing product <span id="current-product-index">0</span> of <span id="total-products">0</span></p>
+                <p id="current-product-name"></p>
+            </div>
+            <div class="analysis-log" id="analysis-log">
+                <!-- Les logs d'analyse apparaîtront ici -->
+            </div>
+        </section>
+
+        <!-- Section des résultats -->
+        <section id="results-section" class="app-section">
+            <h2>Product Analysis Results</h2>
+            <div class="results-controls">
+                <div class="product-navigation">
+                    <button id="prev-product-btn" class="nav-btn">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <span id="product-navigation-index">Product 0 of 0</span>
+                    <button id="next-product-btn" class="nav-btn">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="product-details">
+                <div class="product-info">
+                    <h3 id="product-name">Product Name</h3>
+                    <div class="product-fields">
+                        <div class="field-item">
+                            <label>MRN:</label>
+                            <span id="product-mrn">-</span>
+                            <button class="edit-btn small-btn"><i class="fas fa-edit"></i></button>
+                        </div>
+                        <div class="field-item">
+                            <label>Type:</label>
+                            <span id="product-type">-</span>
+                            <button class="edit-btn small-btn"><i class="fas fa-edit"></i></button>
+                        </div>
+                        <div class="field-item">
+                            <label>Directive:</label>
+                            <span id="product-directive">-</span>
+                            <button class="edit-btn small-btn"><i class="fas fa-edit"></i></button>
+                        </div>
+                        <div class="field-item">
+                            <label>Description:</label>
+                            <span id="product-description">-</span>
+                            <button class="edit-btn small-btn"><i class="fas fa-edit"></i></button>
+                        </div>
+                        <div class="field-item">
+                            <label>Brand/Manufacturer:</label>
+                            <span id="product-brand">-</span>
+                            <button class="edit-btn small-btn"><i class="fas fa-edit"></i></button>
+                        </div>
+                        <div class="field-item">
+                            <label>Model/Type:</label>
+                            <span id="product-model">-</span>
+                            <button class="edit-btn small-btn"><i class="fas fa-edit"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-images">
+                    <div class="image-preview" id="image-preview">
+                        <!-- Les images du produit apparaîtront ici -->
+                    </div>
+                    <div class="thumbnail-strip" id="thumbnail-strip">
+                        <!-- Les vignettes des images apparaîtront ici -->
+                    </div>
+                </div>
+            </div>
+            <div class="compliance-criteria">
+                <h3>Compliance Criteria</h3>
+                <div class="criteria-list" id="criteria-list">
+                    <!-- Les critères de conformité apparaîtront ici -->
+                    <div class="criteria-item" data-criteria-id="1">
+                        <div class="criteria-description">
+                            <span class="criteria-number">1.</span>
+                            <span class="criteria-text">CE marking affixed on the appliance or data plate</span>
+                        </div>
+                        <div class="criteria-actions">
+                            <button class="validate-btn small-btn validation-icon validate">
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                            <button class="reject-btn small-btn validation-icon reject">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+                            <span class="criteria-value" id="criteria-1-value">-</span>
+                        </div>
+                    </div>
+                    <!-- Répéter pour les autres critères -->
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button id="save-results-btn" class="primary-btn">
+                    <i class="fas fa-save"></i> Save Results
+                </button>
+            </div>
+        </section>
+
+        <!-- Section d'exportation -->
+        <section id="export-section" class="app-section">
+            <h2>Export Results</h2>
+            <div class="export-options">
+                <div class="export-option">
+                    <input type="radio" id="export-all" name="export-option" value="all" checked>
+                    <label for="export-all">Export all analyzed products</label>
+                </div>
+                <div class="export-option">
+                    <input type="radio" id="export-selected" name="export-option" value="selected">
+                    <label for="export-selected">Export selected products</label>
+                </div>
+            </div>
+            <div class="export-format">
+                <h3>Export Format</h3>
+                <div class="format-option">
+                    <input type="radio" id="format-excel" name="format-option" value="excel" checked>
+                    <label for="format-excel">Excel (.xlsx)</label>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button id="export-excel-btn" class="primary-btn">
+                    <i class="fas fa-file-excel"></i> Export to Excel
+                </button>
+            </div>
+            <div class="export-status">
+                <div id="export-loading-indicator" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> Exporting...
+                </div>
+                <div id="export-success-indicator" style="display: none;">
+                    <i class="fas fa-check-circle"></i> Export complete: <span id="export-path"></span>
+                </div>
+                <div id="export-error-indicator" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i> Error: <span id="export-error-message"></span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
